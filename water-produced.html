@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Produced - BIM Model House</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="admin.html" target="_self">管理员</a></li>
+            <li><a href="water-usage.html" target="_self">用水量</a></li>
+            <li><a href="electricity-usage.html" target="_self">用电量</a></li>
+            <li><a href="water-produced.html" target="_self">产水量</a></li>
+            <li><a href="electricity-produced.html" target="_self">产电量</a></li>
+            <li><a href="settings.html" target="_self">设置</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <!-- Water Produced Section -->
+        <div id="water-produced">
+            <h2>产水量</h2>
+            
+            <!-- Bar Chart -->
+            <div id="water-produced-bar-chart" style="width: 300px; height: 300px;">
+                <canvas id="water-produced-bar"></canvas>
+            </div>
+            
+            <!-- Pie Chart -->
+            <div id="water-produced-pie-chart" style="width: 300px; height: 300px;">
+                <canvas id="water-produced-pie"></canvas>
+            </div>
+        </div>
+
+        <script>
+            // Sample Data for Water Production
+            var waterProductionData = {
+                labels: ['水井', '雨水', '处理水'],
+                datasets: [{
+                    label: '产水量（吨）',
+                    data: [500, 300, 200], // Sample data for each source in gallons
+                    backgroundColor: '#FF6384', // Color for the bars
+                }]
+            };
+
+            var waterProductionPieData = {
+                labels: ['水井', '雨水', '处理水'],
+                datasets: [{
+                    data: [500, 300, 200], // Sample data for each source in gallons
+                    backgroundColor: ['#FF6384', '#FFCE56', '#36A2EB'], // Colors for the pie chart segments
+                }]
+            };
+
+            // Bar Charts
+            var ctxWaterProducedBar = document.getElementById('water-produced-bar').getContext('2d');
+            var waterProducedBarChart = new Chart(ctxWaterProducedBar, {
+                type: 'bar',
+                data: waterProductionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                },
+            });
+
+            // Pie Charts
+            var ctxWaterProducedPie = document.getElementById('water-produced-pie').getContext('2d');
+            var waterProducedPieChart = new Chart(ctxWaterProducedPie, {
+                type: 'pie',
+                data: waterProductionPieData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                },
+            });
+        </script>
+    </div>
+</body>
+</html>
+

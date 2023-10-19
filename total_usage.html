@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Total Water & Electricity Usage</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="site.html" target="_self">美丽乡村1号 管理员</a></li>
+            <li><a href="total_water.html" target="_self">总用水量</a></li>
+            <li><a href="total_electricity.html" target="_self">总用电量</a></li>
+            <li><a href="settings.html" target="_self">每个房间用量</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>总用水量</h2>
+        <div>
+            <canvas id="total-water-usage-bar-chart"></canvas>
+        </div>
+        
+        <h2>总用电量</h2>
+        <div>
+            <canvas id="total-electricity-usage-bar-chart"></canvas>
+        </div>
+        <img src="new background.png" alt="Description of image">
+    </div>
+
+    <script>
+        function fetchDataAndRenderCharts() {
+            // Fetch water usage data
+            fetch('total water.csv')
+                .then(response => response.text())
+                .then(waterData => {
+                    const waterRows = waterData.split('\n');
+                    const waterLabels = [];
+                    const waterUsage = [];
+
+                    waterRows.forEach((row, index) => {
+                        const columns = row.split(',');
+                        if (index > 0) {
+                            waterLabels.push(columns[0]);
+                            waterUsage.push(parseFloat(columns[1]));
+                        }
+                    });
+
+                    const waterCtx = document.getElementById('total-water-usage-bar-chart').getContext('2d');
+                    new Chart(waterCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: waterLabels,
+                            datasets: [{
+                                label: '总用水量 (吨)',
+                                data: waterUsage,
+                                backgroundColor: 'rgba(135,206,250,0.8)'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Fetch electricity usage data
+                    return fetch('total electricity.csv');
+                })
+                .then(response => response.text())
+                .then(electricityData => {
+                    const electricityRows = electricityData.split('\n');
+                    const electricityLabels = [];
+                    const electricityUsage = [];
+
+                    electricityRows.forEach((row, index) => {
+                        const columns = row.split(',');
+                        if (index > 0) {
+                            electricityLabels.push(columns[0]);
+                            electricityUsage.push(parseFloat(columns[1]));
+                        }
+                    });
+
+                    const electricityCtx = document.getElementById('total-electricity-usage-bar-chart').getContext('2d');
+                    new Chart(electricityCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: electricityLabels,
+                            datasets: [{
+                                label: '总用电量 (kWh)',
+                                data: electricityUsage,
+                                backgroundColor: 'yellow'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Call the function to fetch data and render charts
+        fetchDataAndRenderCharts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+body {
+    background-color: #9a9999;
+    margin: 0;
+    padding: 20px 20px 20px 250px;
+    display: flex;    
+}
+
+.sidebar {
+    height: 100%;
+    width: 230px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    overflow-y: scroll;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding-left: 0;  /* This will remove any default padding on the left */
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 0;
+    padding: 0;
+}
+
+.admin-icon {
+    background: url('./avartar.png') left center no-repeat;
+    background-size: 20px 20px; /* Adjust the size as needed */
+    padding-left: 30px; /* Adjust the left padding to create space for the icon */
+}
+
+li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #fff;
+}
+
+li a:hover {
+    background-color: #555;
+}
+
+.content {
+    
+    margin-left: 0px; /* Adjust this to match your sidebar width */
+    padding: 0px;
+}
+
+/* .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+} */
+
+.content .charts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.content > * {
+    flex: 1; /* Allow children to grow and take up space */
+}
+
+.content img {
+    max-width: 800px; /* Adjust as needed */
+    height: auto;
+    padding: 20px;
+    position: fixed; /* Fixes the image to the viewport */
+    top: 10px;       /* 10px from the top */
+    right: 10px;
+}
+
+
+/* Add more styles for your BIM model and content as needed */

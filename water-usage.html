@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Usage</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <style>
+        /* Main table styling */
+        table {
+            border-collapse: collapse; /* Ensures borders are combined/seamless */
+            width: 100%; /* Optional: Set the width of the table to span the full width of its container */
+            margin-bottom: 20px; /* Optional: Add some space below the table */
+        }
+    
+        /* Table header and cell styling */
+        th, td {
+            border: 1px solid #dddddd; /* Add a border to headers/cells */
+            padding: 8px; /* Add some padding inside headers/cells */
+            text-align: left; /* Left-align the text inside headers/cells */
+        }
+    
+        /* Table header specific styling */
+        th {
+            background-color: #f2f2f2; /* Add a light grey background to headers */
+        }
+    
+        /* Alternate row shading (zebra-striping) */
+        tr:nth-child(odd) {
+            background-color: #f9f9f9; /* Add a light grey background to odd rows */
+        }
+    
+        /* Optional: Style to give some hover effect for better interactivity */
+        tr:hover {
+            background-color: #eaeaea; /* Slightly darken the row color on mouse hover */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="site.html" target="_self">美丽乡村1号 管理员</a></li>
+            <li><a href="total_water.html" target="_self">总用水量</a></li>
+            <li><a href="total_electricity.html" target="_self">总用电量</a></li>
+            <li><a href="settings.html" target="_self">每个房间用量</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="charts-container">
+            <h2>每间房屋用水量</h2>
+    
+            <!-- Bar Chart for Water Usage -->
+            <div style="width: 400px; height: 400px;">
+                <canvas id="water-usage-bar-chart"></canvas>
+            </div>
+            
+            <!-- Pie Chart for Water Usage -->
+            <div style="width: 400px; height: 400px;">
+                <canvas id="water-usage-pie-chart"></canvas>
+            </div>
+            
+            <!-- Table for Water Usage Data -->
+            <table id="water-usage-table">
+                <thead>
+                    <tr>
+                        <th>房间</th>
+                        <th>用量 (吨)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody> <!-- This is initially empty and will be populated dynamically -->
+            </table>
+        </div>
+    
+        <!-- Image on the right -->
+        <img src="new background.png" alt="Description of image">
+    </div>
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Function to fetch and display data from the CSV file as a table
+        function displayWaterUsageData(selectedMonth) {
+            fetch(`${selectedMonth}-water-usage-data.csv`) // Update the file path to your CSV data
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n');
+                    const tableBody = document.querySelector('#water-usage-table tbody');
+                    tableBody.innerHTML = ''; // Clear existing table rows
+
+                    rows.forEach((row, index) => {
+                        const columns = row.split(',');
+                        if (index > 0) {
+                            const tr = document.createElement('tr');
+                            columns.forEach((column, columnIndex) => {
+                                const cell = document.createElement(index === 0 ? 'th' : 'td');
+                                cell.textContent = column;
+                                tr.appendChild(cell);
+                            });
+                            tableBody.appendChild(tr);
+                        }
+                    });
+
+                    // Call the function to update the charts after populating the table
+                    updateCharts();
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Function to update the charts
+        function updateCharts() {
+            const table = document.getElementById('water-usage-table');
+            const dataRows = table.querySelectorAll('tbody tr');
+            const labels = [];
+            const data = [];
+            const backgroundColor = [];
+
+            dataRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                labels.push(cells[0].textContent);
+                data.push(parseFloat(cells[1].textContent));
+                // You can customize the colors as needed
+                backgroundColor.push('#' + Math.floor(Math.random()*16777215).toString(16));
+            });
+
+            // Update Bar Chart
+            const barChart = document.getElementById('water-usage-bar-chart').getContext('2d');
+            const barChartInstance = new Chart(barChart, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '用量 (吨)',
+                        data: data,
+                        backgroundColor: backgroundColor,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+
+            // Update Pie Chart
+            const pieChart = document.getElementById('water-usage-pie-chart').getContext('2d');
+            const pieChartInstance = new Chart(pieChart, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColor,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        // Get the selected month from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedMonth = urlParams.get('month');
+
+        // Call the function to display water usage data based on the selected month
+        displayWaterUsageData(selectedMonth);
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electricity Produced - BIM Model House</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class ="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="admin.html" target="_self">管理员</a></li>
+            <li><a href="water-usage.html" target="_self">用水量</a></li>
+            <li><a href="electricity-usage.html" target="_self">用电量</a></li>
+            <li><a href="water-produced.html" target="_self">产水量</a></li>
+            <li><a href="electricity-produced.html" target="_self">产电量</a></li>
+            <li><a href="settings.html" target="_self">设置</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <!-- Electricity Produced Section -->
+        <div id="electricity-produced">
+            <h2>产电量</h2>
+            
+            <!-- Bar Chart -->
+            <div id="electricity-produced-bar-chart" style="width: 300px; height: 300px;">
+                <canvas id="electricity-produced-bar"></canvas>
+            </div>
+            
+            <!-- Pie Chart -->
+            <div id="electricity-produced-pie-chart" style="width: 300px; height: 300px;">
+                <canvas id="electricity-produced-pie"></canvas>
+            </div>
+        </div>
+
+        <script>
+            // Sample Data for Electricity Production
+            var electricityProductionData = {
+                labels: ['太阳能', '风能', '发电机'],
+                datasets: [{
+                    label: '产电量（千瓦时）',
+                    data: [200, 100, 50], // Sample data for each source in kilowatt-hours
+                    backgroundColor: '#36A2EB', // Color for the bars
+                }]
+            };
+
+            var electricityProductionPieData = {
+                labels: ['太阳能', '风能', '发电机'],
+                datasets: [{
+                    data: [200, 100, 50], // Sample data for each source in kilowatt-hours
+                    backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384'], // Colors for the pie chart segments
+                }]
+            };
+
+            // Bar Charts
+            var ctxElectricityProducedBar = document.getElementById('electricity-produced-bar').getContext('2d');
+            var electricityProducedBarChart = new Chart(ctxElectricityProducedBar, {
+                type: 'bar',
+                data: electricityProductionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                },
+            });
+
+            // Pie Charts
+            var ctxElectricityProducedPie = document.getElementById('electricity-produced-pie').getContext('2d');
+            var electricityProducedPieChart = new Chart(ctxElectricityProducedPie, {
+                type: 'pie',
+                data: electricityProductionPieData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                },
+            });
+        </script>
+    </div>
+</body>
+</html>

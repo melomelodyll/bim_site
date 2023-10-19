@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Total Water Usage</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styles for tables */
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="site.html" target="_self">美丽乡村1号 管理员</a></li>
+            <li><a href="total_water.html" target="_self">总用水量</a></li>
+            <li><a href="total_electricity.html" target="_self">总用电量</a></li>
+            <li><a href="settings.html" target="_self">每个房间用量</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h2>总用水量</h2>
+        <div>
+            <canvas id="total-water-usage-bar-chart"></canvas>
+        </div>
+
+        <!-- Table for displaying the CSV data -->
+        <table id="water-usage-table">
+            <thead>
+                <tr>
+                    <th>月份</th>
+                    <th>用量（吨）</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <img src="new background.png" alt="Description of image">
+    </div>
+
+    <script>
+        function displayTotalWaterUsageData() {
+            fetch('total water.csv') // Update this to the path of your CSV data for water
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n');
+                    const labels = [];
+                    const totalUsage = [];
+                    const tableBody = document.querySelector('#water-usage-table tbody');
+
+                    rows.forEach((row, index) => {
+                        const columns = row.split(',');
+                        if (index > 0 && columns.length > 1) { // Assuming the first row is the header
+                            labels.push(columns[0]); // Assuming month is the first column
+                            totalUsage.push(parseFloat(columns[1])); // Assuming total usage is the second column
+
+                            // Add data to table
+                            const tr = document.createElement('tr');
+                            const monthCell = document.createElement('td');
+                            monthCell.textContent = columns[0];
+                            const usageCell = document.createElement('td');
+                            usageCell.textContent = columns[1];
+                            tr.appendChild(monthCell);
+                            tr.appendChild(usageCell);
+                            tableBody.appendChild(tr);
+                        }
+                    });
+
+                    const ctx = document.getElementById('total-water-usage-bar-chart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Usage (Tons)',
+                                data: totalUsage,
+                                backgroundColor: 'rgba(135, 206, 235, 0.7)' // Light blue color
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Call the function to display total water usage data
+        displayTotalWaterUsageData();
+    </script>
+</body>
+</html>
+

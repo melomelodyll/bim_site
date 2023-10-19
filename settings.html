@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li class="admin-icon"><a href="site.html" target="_self">美丽乡村1号 管理员</a></li>
+            <li><a href="total_water.html" target="_self">总用水量</a></li>
+            <li><a href="total_electricity.html" target="_self">总用电量</a></li>
+            <li><a href="settings.html" target="_self">每个房间用量</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>每个房间用水/电量</h2>
+
+        <label for="water-month-select">选择月份</label>
+        <select id="water-month-select">
+            <option value="July">七月</option>
+            <option value="August">八月</option>
+            <option value="September">九月</option>
+            <!-- Add more months as needed -->
+        </select>
+
+        <button onclick="redirectToWaterUsage()">查看用水量</button>
+
+        <label for="electricity-month-select">选择月份</label>
+        <select id="electricity-month-select">
+            <option value="July">七月</option>
+            <option value="August">八月</option>
+            <option value="September">九月</option>
+            <!-- Add more months as needed -->
+        </select>
+
+        <button onclick="redirectToElectricityUsage()">查看用电量</button>
+    </div>
+
+    <script>
+        function redirectToWaterUsage() {
+            const selectedMonth = document.getElementById('water-month-select').value;
+            const link = `water-usage.html?month=${selectedMonth}`;
+            window.location.href = link;
+        }
+
+        function redirectToElectricityUsage() {
+            const selectedMonth = document.getElementById('electricity-month-select').value;
+            const link = `electricity-usage.html?month=${selectedMonth}`;
+            window.location.href = link;
+        }
+    </script>
+</body>
+</html>
